@@ -1,300 +1,332 @@
 <div align="center">
 
-# Kanade · 奏
+# Lrinaus · Kanade-Astro
 
-一个记录热爱与日常的 Astro 7 博客模板。
+一个记录代码、灵感与日常的个人博客。
 
-基于 Astro、Vue 和 Tailwind CSS 构建，以插画首屏、粉色圆角卡片和轻盈波浪，收藏代码、灵感与生活。
-
-[模板源码](https://github.com/sudoriaa/Kanade-Astro/tree/codex/astro-theme) · [在线演示](https://sudoriaa.github.io/Kanade-Astro/) · [快速开始](#快速开始) · [文章写作](#文章写作) · [部署指南](#部署指南)
+基于 Astro、Vue、Tailwind CSS 和 Kanade 主题构建；文章内容由 Markdown 内容集合管理，并通过 GitHub Actions 定时从飞书知识库同步。Vercel 负责监听 GitHub 仓库并自动部署最新版本。
+![website](image.png)
+[在线博客](https://lisii.cn) · [Astro 文档](https://docs.astro.build/) · [Vercel 文档](https://vercel.com/docs)
 
 </div>
 
-## 界面预览
 
-![Kanade 桌面端首页](docs/images/home.png)
+## 项目概览
 
-桌面端采用「个人信息与分类 / 文章列表 / 站点动态」三栏布局；手机端聚焦文章阅读，导航收起为菜单。内置浅色与深色主题，保留本地字体和首屏插画，使用通用示例作者与花朵头像。
+这个项目是一个静态 Astro 博客。文章使用 Markdown 编写，Astro 在构建阶段读取 `src/content/posts/` 中的文章并生成静态 HTML。网站不依赖数据库。
 
-留言页使用独立的彩色便签墙布局，左侧写便签，右侧收藏心情。下图为模板默认的空墙状态。
+当前内容同步链路如下：
 
-![Kanade 彩色留言墙](docs/images/message-wall.png)
+```text
+飞书知识库
+    ↓
+feishu-pages
+    ↓
+生成 dist/docs 和 dist/docs/assets
+    ↓
+normalize.mjs 整理文章、分类、Frontmatter 和图片
+    ↓
+复制到 src/content/posts 和 public/assets
+    ↓
+GitHub Actions 提交更新
+    ↓
+Vercel 检测 GitHub 提交并自动部署
+```
 
-## 功能一览
-
-| 模块 | 功能 |
-| --- | --- |
-| 首页与归档 | 文章卡片、分类切换、标签筛选、月份归档、分页，筛选条件随 URL 保存 |
-| 全站搜索 | 匹配标题、摘要、分类和标签，支持多关键词、空结果提示与键盘操作 |
-| 文章阅读 | Markdown 正文、代码高亮、代码复制、文章目录、阅读进度、链接分享、相邻文章 |
-| 站点页面 | 友链、关于、留言、404 页面，以及旧文章和留言路径跳转 |
-| 主题与适配 | 深浅主题切换与偏好保存、移动端菜单、响应式布局、减少动态效果偏好支持 |
-| 彩色留言墙 | 五种便签颜色、胶带与折角、贴墙动效、时间排序、保存与删除、旧留言兼容 |
-| 订阅与元数据 | RSS、站点地图、robots.txt、独立页面标题与描述、canonical、Open Graph |
-
-文章数量、分类、标签和侧栏最近更新均从内容库生成。仓库附带 8 篇示例文章，方便查看排版并开始写作。
-
-## 技术栈
+## 环境
 
 | 技术 | 用途 |
 | --- | --- |
-| Astro 7 | 页面路由、内容集合与静态构建 |
-| Vue 3 | 搜索、筛选、导航和留言等交互组件 |
-| Tailwind CSS 4 | 样式工具与主题基础 |
-| TypeScript 5 | 类型约束与静态检查 |
+| Astro 7 | 静态页面生成、路由和内容集合 |
+| Vue 3 | 搜索、筛选、导航和留言墙等交互组件 |
+| Tailwind CSS 4 | 样式系统与响应式布局 |
+| TypeScript 5 | 类型检查和开发约束 |
 | Iconify | 页面图标 |
-| Playwright | 桌面与手机布局的浏览器测试 |
-| pnpm | 依赖管理 |
+| Playwright | 浏览器自动化测试 |
+| `feishu-pages` | 从飞书知识库读取文档 |
+| `js-yaml` | 解析和生成 Markdown Frontmatter |
+| pnpm 10 | 依赖管理 |
+| Vercel | 生产环境自动构建和部署 |
 
-页面以静态 HTML 输出，需要交互的 Vue 组件按需水合。日常写作无需数据库，构建产物位于 `dist/`。
+当前 Node.js 要求：
 
-## 快速开始
+```text
+Node.js >= 22.12.0
+pnpm = 10.33.0
+```
 
-准备 Node.js 22.12 或更高版本，以及 pnpm 10。
+## 本地开发
 
-```sh
-git clone --branch codex/astro-theme https://github.com/sudoriaa/Kanade-Astro.git
-cd Kanade-Astro
+### 安装依赖
+
+```bash
 pnpm install --frozen-lockfile
+```
+
+### 启动开发服务器
+
+```bash
 pnpm dev
 ```
 
-浏览器打开 [http://localhost:4321](http://localhost:4321)。
+默认访问地址：
+
+```text
+http://localhost:4321
+```
 
 ### 常用命令
 
-| 命令 | 说明 |
+| 命令 | 作用 |
 | --- | --- |
-| `pnpm dev` | 启动开发服务器 |
-| `pnpm check` | 检查 Astro、Vue 与 TypeScript |
-| `pnpm build` | 生成静态站点到 `dist/` |
-| `pnpm preview` | 预览构建产物 |
-| `pnpm test` | 运行浏览器测试，需要先构建 |
-| `pnpm deploy:local` | 在 Windows 后台启动构建产物预览 |
+| `pnpm dev` | 启动 Astro 开发服务器 |
+| `pnpm check` | 检查 Astro、Vue 和 TypeScript 类型 |
+| `pnpm build` | 构建生产站点到 `dist/` |
+| `pnpm preview` | 预览已经构建好的站点 |
+| `pnpm test` | 运行 Playwright 浏览器测试 |
+| `pnpm run sync` | 拉取飞书知识库并更新文章和图片 |
+| `pnpm run export` | 只运行 `feishu-pages` 导出 |
+| `pnpm run normalize` | 只运行导出结果整理脚本 |
+| `pnpm deploy:local` | Windows 下在后台启动生产预览 |
 
-## 项目结构
+ `package.json` 中飞书同步脚本如下：
 
-```text
-Kanade-Astro/
-├── public/
-│   ├── fonts/                # 本地字体
-│   ├── images/               # 头像、首屏插画
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   ├── header/           # 导航、搜索、欢迎区域、波浪
-│   │   ├── home/             # 个人卡片与左右侧栏
-│   │   ├── posts/            # 文章封面、列表与筛选
-│   │   └── Guestbook.vue     # 彩色便签留言墙
-│   ├── content/posts/        # Markdown 文章
-│   ├── data/friends.ts       # 友链数据
-│   ├── layouts/              # 基础布局与三栏布局
-│   ├── lib/posts.ts          # 文章读取、摘要与标签
-│   ├── pages/                # 页面、文章详情、RSS 等路由
-│   ├── scripts/theme.ts      # 主题切换
-│   ├── styles/global.css     # 字体、主题变量与全局样式
-│   ├── config.ts             # 站点与作者配置
-│   └── content.config.ts     # 内容集合与文章字段校验
-├── scripts/preview.ps1       # Windows 后台预览脚本
-├── tests/blog.spec.ts        # 浏览器测试
-├── .env.example              # 环境变量示例
-├── netlify.toml              # Netlify 构建配置
-└── playwright.config.ts
+```json
+{
+  "scripts": {
+    "export": "feishu-pages",
+    "normalize": "node scripts/normalize.mjs",
+    "sync": "pnpm run export && pnpm run normalize"
+  }
+}
 ```
 
-## 文章写作
 
-在 [src/content/posts/](src/content/posts/) 中新增 Markdown 文件，例如 `my-first-post.md`：
+## 文章 Frontmatter
+
+一篇手动维护的文章可以这样写：
 
 ```markdown
 ---
-title: "我的第一篇文章"
-description: "用一两句话介绍这篇文章。"
-date: 2026-09-20
-category: "开发笔记"
-tags: ["Astro", "博客"]
+title: "Delegate、event、action & func in C#"
+date: "2024-10-02"
+description: "关于 C# 的委托相关的理解。"
+tags:
+  - Csharp
+category: "笔记"
 cover: "notes"
+image: "/assets/delegate-csharp.jpeg"
 featured: false
 draft: false
 ---
 
-## 从这里开始
+## 正文标题
 
-把想记录的事情写下来。
+这里开始写文章正文。
 ```
 
-文章路径由文件名生成，以上示例对应 `/posts/my-first-post/`。保存后，开发服务器会刷新内容；正式站点需要重新构建和发布。
-
-### 文章字段
+字段说明：
 
 | 字段 | 必填 | 说明 |
 | --- | --- | --- |
 | `title` | 是 | 文章标题 |
-| `description` | 是 | 列表、搜索和页面元数据使用的摘要 |
-| `date` | 是 | 发布日期，建议使用 `YYYY-MM-DD` |
-| `category` | 是 | 前端开发、开发笔记、生活随笔之一 |
-| `tags` | 是 | 标签数组，可为空数组 |
-| `cover` | 是 | 封面样式名称 |
-| `featured` | 否 | 显示「置顶」标记和特色封面，默认为 `false` |
-| `draft` | 否 | 草稿标记，默认为 `false`；草稿不进入页面、搜索和订阅 |
+| `date` | 是 | 发布日期，`YYYY-MM-DD` |
+| `description` | 是 | 文章摘要，用于首页、列表、SEO 和 Open Graph |
+| `tags` | 是 | 标签，例如 `['Csharp', '编程']` |
+| `category` | 是 | 当前支持 `笔记` 和 `碎碎念` |
+| `cover` | 是 | 默认封面图标类型 |
+| `image` | 否 | 文章封面图片 URL，通常使用 `/assets/xxx.png` |
 
-支持的封面样式：`astro`、`vue`、`css`、`notes`、`life`、`typescript`、`git`、`design`。
+当前支持的 `cover` 值：
 
-文章按发布日期倒序排列；`featured` 控制展示标记，当前不改变排序。阅读时间根据正文字符数估算。搜索范围为标题、摘要、分类和标签，不包含文章全文。
+```text
+notes
+casual
+```
 
-需要新增分类时，同步调整 [内容字段约束](src/content.config.ts)、[分类数据](src/lib/posts.ts) 和 [列表分类选项](src/components/posts/PostFeed.vue)。
+注意：`cover` 是默认图标类型，`image` 是真实封面图片。两者用途不同：
 
-## 个性化配置
+```text
+有 image  → 优先显示 image
+没有 image → 根据 cover 显示默认图标
+```
 
-| 配置位置 | 可修改内容 |
+如果新增文章分类，需要同时检查并修改：
+
+```text
+src/content.config.ts
+src/lib/posts.ts
+src/components/posts/PostFeed.vue
+```
+
+
+## 文章封面与图片
+
+飞书同步时，`normalize.mjs` 会自动读取正文中的第一张图片，然后自动加入：
+
+```yaml
+image: /assets/example.jpeg
+```
+
+如果正文中没有图片，则不会写入 `image` 字段，主题会回退到 `cover` 对应的默认图标。
+
+同步脚本会把 Feishu 导出的图片从：
+
+```text
+dist/docs/assets/
+```
+
+复制到：
+
+```text
+public/assets/
+```
+
+`public/assets/` 是 Feishu 图片同步专用目录。当前脚本每次同步前会清空目标目录，再复制当前导出的全部图片，因此不要在其中保存需要手动维护的图片。
+
+### 页面和样式
+
+| 文件或目录 | 用途 |
 | --- | --- |
-| [src/config.ts](src/config.ts) | 站点名称、描述、关键词、导航、欢迎语、背景、作者与社交链接 |
-| [src/data/friends.ts](src/data/friends.ts) | 友链名称、介绍、地址、图标与配色 |
-| [src/styles/global.css](src/styles/global.css) | 字体、主题色、卡片、间距与响应式布局 |
-| [src/pages/about.astro](src/pages/about.astro) | 关于页的个人介绍与站点说明 |
-| [public/images/](public/images/) | 头像和首屏图片 |
-| [.env.example](.env.example) | 正式站点地址示例 |
+| `src/pages/` | 首页、文章页、友链、关于、留言、RSS、站点地图等路由 |
+| `src/components/` | 页面组件和交互组件 |
+| `src/layouts/` | 全局布局和文章布局 |
+| `src/lib/posts.ts` | 文章读取、摘要、分类、标签和归档逻辑 |
+| `src/styles/global.css` | 字体、颜色、卡片、间距、主题和响应式样式 |
+| `public/images/` | 头像、首屏插画等站点固定图片 |
+| `public/assets/` | 文章图片，主要由 Feishu 同步生成 |
 
-首屏、作者介绍与示例文章可以按自己的风格替换。站点中的部分公告和介绍位于页面或侧栏组件中，可直接编辑对应文字。
 
-### 快捷操作
+## 飞书知识库同步
 
-- `Ctrl + K` / `⌘ + K`：打开全站搜索。
-- `Esc`：关闭搜索弹窗或手机导航菜单。
-- 导航栏太阳 / 月亮按钮：切换主题并保存偏好。
-- 文章目录：跳转至对应标题；阅读时显示当前章节。
-- 文章代码块右上角按钮：复制代码。
+### 1. 知识库结构
 
-复制功能依赖浏览器剪贴板能力；访问正式站点时建议使用 HTTPS，当前浏览器不支持时界面会提示手动复制。
+当前约定：
 
-## 留言说明
-
-当前留言页是本地彩色便签墙，数据保存在当前浏览器的 `localStorage`：
-
-- 支持奶油黄、樱花粉、薄荷绿、晴空蓝、浅芋紫五种颜色，写作纸张随选择实时换色。
-- 点击「贴到留言墙」后生成彩色便签，颜色与内容一起保存，支持最新 / 最早顺序切换。
-- 每张便签右上角可取下留言；旧版留言会自动获得稳定的颜色并保留原有内容。
-- 空墙展示小站寄语与写作灵感，这些引导卡片不计入访客便签数量。
-- 留言仅自己可见，不会发送给站长，也不会跨设备同步。
-- 最多保存 100 条，昵称最多 24 字，内容最多 500 字。
-- 刷新页面后仍可查看；删除留言或清除站点数据后，相应内容会被移除。
-- 内容按纯文本渲染，存储被禁用或空间不足时会显示未保存提示。
-
-如需多人可见的公开留言，可以在 [Guestbook.vue](src/components/Guestbook.vue) 对应位置接入评论服务或后端接口。
-
-## 部署指南
-
-### 设置站点地址
-
-将 `.env.example` 复制为 `.env`，填写最终域名：
-
-```dotenv
-SITE_URL=https://example.com
+```text
+首页
+笔记
+└── Delegate、event、action & func in C#
+碎碎念
 ```
 
-也可以直接在托管平台设置同名环境变量。修改后重新构建，RSS、站点地图、canonical 和 Open Graph 中的地址会随之更新。未设置时默认使用 `http://localhost:4321`。
+处理规则：
 
-模板支持独立域名及仓库子路径。对于 `/Kanade-Astro/` 这类子路径，将 SITE_URL 设为包含该路径的完整地址即可；SITE_BASE 可选，用于覆盖自动推导的路径。
-
-### 本地预览
-
-```sh
-pnpm build
-pnpm preview --host 0.0.0.0 --port 4321
-```
-
-本机打开 [http://localhost:4321](http://localhost:4321)。同一局域网中的设备可以通过电脑的局域网 IP 和对应端口访问，具体取决于网络和防火墙配置。
-
-Windows 支持在后台启动：
-
-```powershell
-pnpm build
-pnpm deploy:local
-
-# 指定其他端口
-pnpm deploy:local -Port 4322
-```
-
-脚本会检查端口、启动隐藏窗口的预览进程，并验证首页返回状态码 200。日志和进程信息保存在 `.preview/`，该目录已被 Git 忽略。
-
-停止预览时，先查看 `.preview/server-4321.json` 中的 `pid`，核对对应进程后执行：
-
-```powershell
-Stop-Process -Id <进程ID>
-```
-
-`astro preview` 用于查看构建产物；公网访问请将 `dist/` 发布到静态托管平台或静态 Web 服务器。
-
-### 静态托管
-
-| 配置项 | 值 |
+| 飞书节点 | 同步结果 |
 | --- | --- |
-| Node.js | 22.12+ |
-| 安装命令 | `pnpm install --frozen-lockfile` |
-| 构建命令 | `pnpm build` |
-| 发布目录 | `dist` |
-| 环境变量 | `SITE_URL`，设置为实际访问域名 |
+| `首页` | 完全排除 |
+| 一级节点，例如 `笔记` | 写入文章 `category` |
+| 一级节点下的直接子节点 | 生成真正文章 |
+| 一级分类自身 | 不生成 `笔记.md` 或 `碎碎念.md` |
+| 一级分类下的 `封面` 节点 | 不作为文章处理 |
 
-仓库已提供 [netlify.toml](netlify.toml)。导入 Netlify 时可沿用其中的构建与旧路径重定向配置。使用其他静态托管平台时，填写上表中的构建参数。
+### 2. 飞书文章元数据
 
-部署完成后可检查：
+每篇飞书文章的最顶部放置一个 YAML 代码块。飞书编辑器中选择“代码块”，语言选择 `YAML`：
 
-- `/`：首页。
-- `/posts/`：文章列表。
-- `/rss.xml`：文章订阅。
-- `/sitemap.xml`：站点地图。
-- `/robots.txt`：爬虫规则。
-- 任意不存在的路径：站点 404 页面。
-
-
-### GitHub Pages 演示
-
-在线演示：https://sudoriaa.github.io/Kanade-Astro/
-
-本分支是用于官方模板目录的通用演示版本；main 分支保留原来的个人博客。克隆时请选择 codex/astro-theme 分支，以获得与在线演示一致的内容。
-
-仓库提供 .github/workflows/deploy.yml，负责安装依赖、类型检查、构建及部署。使用自己的仓库时，在 Settings → Pages 中选择 GitHub Actions。工作流会根据仓库自动设置 SITE_URL 和 SITE_BASE；本地开发仍默认使用根路径。
-
-首次使用时替换示例作者、社交链接和演示文章。目录页的展示截图与此分支实际输出保持一致。
-## 检查与测试
-
-```sh
-pnpm check
-pnpm build
-pnpm exec playwright install chromium
-pnpm test
+```yaml
+slug: delegate-event-action-func-csharp
+date: "2024-10-02"
+description: 关于 C# 的委托相关的理解。
+tags:
+  - Csharp
+cover: notes
 ```
 
-Linux CI 环境可使用 `pnpm exec playwright install --with-deps chromium` 安装浏览器及所需系统依赖。
+`title` 不需要写，默认使用飞书知识库节点标题。
 
-如果本机已有 Microsoft Edge，可在 PowerShell 中指定浏览器：
+这些字段会被同步脚本读取：
 
-```powershell
-$env:PLAYWRIGHT_CHANNEL = "msedge"
-pnpm test
+```text
+date
+description
+tags
+cover
 ```
 
-测试会启动 `http://127.0.0.1:4173` 上的构建预览。当前提供 12 组场景，分别在桌面视口与手机模拟视口下运行，共 24 项：
+其中：
 
-- 分类、分页与 URL 状态恢复。
-- 标签、月份及空结果处理。
-- 搜索、快捷键和关闭后的焦点恢复。
-- 深浅主题在刷新和跨页面后的保留。
-- 留言保存、输入转义、刷新与删除。
-- 便签颜色持久化、旧留言迁移、异常颜色回退与时间排序。
-- 五种纸张颜色、500 字长留言和深色便签的移动端布局。
-- 损坏存储、空白输入及禁用存储的处理。
-- 文章目录、代码块和相邻文章跳转。
-- 页面横向溢出、图片加载和浏览器错误。
-- 手机导航菜单。
-- RSS、站点地图、404 与旧路径跳转。
+- 有 `date` 时使用文章填写的日期；
+- 没有 `date` 时使用 Feishu 节点创建时间；
+- 有 `description` 时使用手动摘要；
+- 没有 `description` 时使用正文第一段；
+- `tags` 没有自动推断，建议手动填写；
+- `cover` 没有填写时，主题使用默认处理；
+- 正文第一张图片会自动成为 `image`。
 
-测试结果、失败截图与追踪文件输出到 `test-results/`，不进入版本控制。
+首页如果需要额外标记，可以在顶部 YAML 中写：
 
-## 素材与致谢
+```yaml
+hide: true
+```
 
-- 首屏插画沿用原项目配置中的[图片资源](https://img2.huashi6.com/images/resource/thumbnail/2025/02/09/23269_76985257670.jpg)，保留图中的原作者标记，并存放为本地文件。
-- 「造字工房悦圆」「Oxanium」字体沿用原仓库；模板默认头像为随项目提供的花朵 SVG。
-- 感谢 Astro、Vue、Tailwind CSS、Iconify 和 Playwright 等开源项目。
+### 3. 同步脚本
 
-愿每一份热爱，都有一个安放的地方。
+脚本scripts/normalize.mjs负责：
+
+1. 读取 `dist/docs.json`；
+2. 找出一级分类和分类下的直接子文章；
+3. 删除首页和分类 Markdown；
+4. 整理文章 Frontmatter；
+5. 设置 `category`；
+6. 使用 Feishu 创建时间作为日期兜底；
+7. 使用正文第一段作为 description 兜底；
+8. 使用正文第一张图片作为 `image`；
+9. 清空并更新 `src/content/posts/`；
+10. 清空并更新 `public/assets/`；
+11. 重新生成 `SUMMARY.md`。
+
+脚本每次同步会清空以下两个目录：
+
+```text
+src/content/posts/
+public/assets/
+```
+
+## GitHub Actions 自动同步
+
+GitHub Actions 只负责拉取飞书内容和提交文章，不负责构建或部署网站。Vercel 负责监听 GitHub 提交并自动部署，因此同步流程是：
+
+```text
+GitHub Actions
+    ↓
+更新 src/content/posts 和 public/assets
+    ↓
+git commit + git push
+    ↓
+Vercel 自动构建和部署
+```
+
+工作流文件：
+
+```text
+.github/workflows/sync-feishu.yml
+```
+
+### 修改同步频率
+
+例如每天香港时间凌晨 3:17：
+
+```yaml
+schedule:
+  - cron: '17 3 * * *'
+    timezone: 'Asia/Hong_Kong'
+```
+
+每 6 小时同步一次：
+
+```yaml
+schedule:
+  - cron: '17 */6 * * *'
+    timezone: 'Asia/Hong_Kong'
+```
+
+定时工作流可能存在延迟；修改后的工作流必须进入默认分支，定时任务才会按默认分支中的版本执行。
+
+
+## 许可证与致谢
+
+项目使用的 Astro、Vue、Tailwind CSS、Iconify、Playwright 和其他依赖遵循各自的开源许可证。
+
+感谢[Kanade](https://github.com/sudoriaa/Kanade-Astro/tree/codex/astro-theme)提供了这么好看的主题。
+
