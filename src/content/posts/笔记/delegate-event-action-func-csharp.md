@@ -1,22 +1,29 @@
 ---
-title: Delegate、event、action & func in C# 
-date: 2024-10-2
-description: 关于C#的委托相关的理解.
-tags: ["Csharp"]
-category: "笔记"
-cover: "notes"
-image: "/images/covers/sudoria.jpg"
---- 
+title: Delegate、event、action & func in C#
+date: '2024-10-02'
+description: 关于 C# 的委托相关的理解。
+tags:
+  - Csharp
+category: 笔记
+cover: notes
+image: /assets/JabEbNjnEoLEpYxlTbscr8sCnpe.jpeg
+---
 
-### delegate · 委托
+# Delegate、event、action & func in C# 
 
-#### 什么是delegate
-```Delegate```是一个数据类型，我们可以像定义结构体一样定义一个```delegate类型```，```delegate```是存有对某个```方法(Function)``` 的 ```引用``` 的一种引用类型变量。简单的说，它就是一个用来装函数的容器，有点像C++的函数指针但不太一样。
+### <b>delegate · 委托</b>
+
+#### <b>什么是delegate</b>
+
+`Delegate`是一个数据类型，我们可以像定义结构体一样定义一个`delegate类型`，`delegate`是存有对某个`方法(Function)` 的 `引用` 的一种引用类型变量。简单的说，它就是一个用来装函数的容器，有点像C++的函数指针但不太一样。
 
 ```csharp
 public delegate void MyDelegate (int para);
 ```
+
 上面就是一个输入参数为int，无返回值的委托的声明。
+
+<img src="/assets/JabEbNjnEoLEpYxlTbscr8sCnpe.jpeg" src-width="4439" src-height="2340" align="center"/>
 
 它可以这样用：
 
@@ -45,10 +52,13 @@ public void start(MyDelegate myDelegate)
 }
 }
 ```
+
 委托的基础使用就是这样了。我们会在什么情况下使用委托呢？
 
 假设你是dice工作室的一名程序员，你们正在开发新的战地系列，现在你们想在每一局游戏结束后统计玩家的战绩，根据某些数据的排名来展示这一项最厉害的玩家。
+
 现在我们有一个结构体用于存储每一局的每个玩家的数据：
+
 ```csharp
 struct PlayerStats{
     string name;
@@ -57,7 +67,9 @@ struct PlayerStats{
     int score;
 }
 ```
+
 在一局游戏结束后，我们按不同的类别展示玩家姓名，现在我们来写一个 displayPlayerName 类实现这个功能：
+
 ```csharp
 class DisplayPlayerName{
 
@@ -94,10 +106,13 @@ class DisplayPlayerName{
     };
 }
 ```
+
 可以看到，如果按照两项数据排名，我们就得写两个函数，而且这两个函数的大部分代码是相同的。可以预见如果我们有非常多的玩家数据，我们要写的函数方法数量将会非常多。
+
 现在我们来试试引入委托。
 
 首先我们先只保留一个返回玩家名的方法：
+
 ```csharp
 class DisplayPlayerName{
 
@@ -123,6 +138,7 @@ class DisplayPlayerName{
 ```
 
 现在声明一个用于计算最高分的委托：
+
 ```csharp
 class DisplayPlayerName{
 
@@ -152,6 +168,7 @@ class DisplayPlayerName{
 ```
 
 我们为计算分数的委托写一些小函数，现在就是更改后的样子：
+
 ```csharp
 class DisplayPlayerName{
 
@@ -188,8 +205,11 @@ class DisplayPlayerName{
     };
 }
 ```
+
 这看起来比之前要简洁多了！如果有更多项目，我们只需要写一些简单的小函数即可。
-我们还可以使用```lambda```表达式进一步简化它：
+
+我们还可以使用`lambda`表达式进一步简化它：
+
 ```csharp
 class DisplayPlayerName{
 
@@ -216,11 +236,15 @@ class DisplayPlayerName{
     };
 }
 ```
+
 这样就可以非常方便而且简洁的扩展它。
 
-### event · 事件
+### <b>event · 事件</b>
+
 写完了排名的代码，你突然闻到有一股烟味（谁又在工位上抽烟了？）你定睛一看：原来是工作室服务器着火了！幸运的是火很快被自动扑灭了，不幸的是有一块硬盘被烧坏了，所有玩家死亡后的逻辑代码全部消失了，你们不得不重新编写这部分代码。
+
 你在回收站里发现了之前的某个时候的代码：
+
 ```csharp
 class Player{
     Achievement achievement;
@@ -240,11 +264,13 @@ class UI{
     public void OnPlayerDeath(){};
 }
 ```
+
 这看起来还不错：一旦player挂掉，die函数就会调用所有需要知道player是否挂掉的类的处理函数。
 
 但这样做有一些小问题：时刻追踪player什么时候挂掉的这点破事根本不应该是Player类该关心的（到了发工资的日子，难道应该是你自己来通知工作室发工资吗？），而且如果每一种行为（比如开枪、回血）都这么做，那很快player就会变得臃肿而丑陋。而且这样做还有一个最大的问题：如果与player有关的类有成千上万个，如果不破除Player类所关联的依赖的话，我们无法从项目中移除任何一个类——你需要找到所有调用了这个类的方法的地方并将他一一删掉，这样如果你想在另一个项目复用Player类几乎是不可能的。
 
 这种情况我们就该请出委托了：
+
 ```csharp
 class Player{
     delegate void deathDelegate();
@@ -285,9 +311,11 @@ class UI{
     };
 }
 ```
+
 这样监听player是否死亡的职责就转移到了想要获取player是否死亡的类的身上，不管有多少类需要死亡状态，只需要在deathevent中注册一下即可，Player类本身也不需要关心谁调用了它。
 
 这看起来很美好，但是还是有一些小问题。如果你加班太久头昏眼花，把他写成了这样：
+
 ```csharp
 class Player{
     delegate void deathDelegate();
@@ -328,9 +356,11 @@ class UI{
     };
 }
 ```
+
 看到了吗？
+
 ```csharp
-    ......
+......
 class Achievement{
     public Player player;
     void Start()
@@ -340,10 +370,13 @@ class Achievement{
     }
     ......
 ```
+
 这样会清空所有注册了的函数，现在只有Achievement类注册了。
+
 而且现在的deathevent可以在任何其他类中调用——即使player活得好好的。
 
-为了解决这个问题，我们可以在委托的声明前面加上关键字```event```：
+为了解决这个问题，我们可以在委托的声明前面加上关键字`event`：
+
 ```csharp
 class Player{
     delegate void deathDelegate();
@@ -384,13 +417,17 @@ class UI{
     };
 }
 ```
-这样一来，其他类只可以通过 ```+=``` 或 ```-=``` 调用 ```deathevent```，这样就规避了上述风险。因此你可以把event理解成通过添加这个关键字就给委托添加了两个限制。
 
-### Action 和 Func
+这样一来，其他类只可以通过 `+=` 或 `-=` 调用 `deathevent`，这样就规避了上述风险。因此你可以把event理解成通过添加这个关键字就给委托添加了两个限制。
+
+### <b>Action 和 Func</b>
+
 Action 和 Func 并没有什么新功能，他们只是帮我们更便捷的创建委托和事件。
-> 为了使用 Action 和 Func ，你需要 ```using System;```
 
-Action可以表示**无返回值**、无参数的的委托，我们可以把上面的委托声明简写成这样：
+> 为了使用 Action 和 Func ，你需要 `using System;`
+
+Action可以表示<b>无返回值</b>、无参数的的委托，我们可以把上面的委托声明简写成这样：
+
 ```csharp
 class Player{
     // delegate void deathDelegate();
@@ -404,12 +441,14 @@ class Player{
     }
 }
 ```
-或者使用 ```Action<T>``` / ```Action<T1,T2>``` 表示**无返回值**、有参数的委托
+
+或者使用 ```Action&lt;T&gt;``` / ```Action&lt;T1,T2&gt;``` 表示<b>无返回值</b>、有参数的委托
 
 它还有一个很方便的用法：
+
 使用 Action 委托时，不必显式定义封装无参数过程的委托。 例如，以下代码显式声明名为 的 ShowValue 委托，并将对实例方法的 Name.DisplayToWindow 引用分配给其委托实例。
 
-``` C# 
+```csharp
 using System;
 using System.Windows.Forms;
 
@@ -445,9 +484,10 @@ public class testTestDelegate
    }
 }
 ```
+
 通过Action 而不是显式定义新委托并为其分配命名方法。
 
-``` C# 
+```csharp
 using System;
 using System.Windows.Forms;
 
@@ -481,13 +521,17 @@ public class testTestDelegate
    }
 }
 ```
+
 很方便，可以少一行。
 
+相对应的，```Func&lt;...&gt;``` 表示<b>有返回值</b>的委托，```&lt;&gt;``` 中前面的参数会作为委托的参数使用，而最后一个参数作为返回值:
 
-相对应的，```Func<...>``` 表示**有返回值**的委托，```<>``` 中前面的参数会作为委托的参数使用，而最后一个参数作为返回值:
-```
+```text
 Func<T> ->  delegate T myDelegate();
-``` 
 ```
+
+```text
 Func<T1,T2,T3> ->  delegate T3 myDelegate(T1 t1,T2 t2);
-``` 
+```
+
+
