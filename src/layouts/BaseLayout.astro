@@ -10,7 +10,7 @@ import { getPosts, summarize } from "../lib/posts";
 interface Props { title?: string; description?: string; heroTitle?: string; heroSubtitle?: string; home?: boolean; article?: boolean }
 const { title, description = siteInfo.description, heroTitle, heroSubtitle, home = false, article = false } = Astro.props;
 const posts = (await getPosts()).map(summarize);
-const pageTitle = title ? `${title} · ${siteInfo.title}` : `${siteInfo.title} · 记录热爱与日常`;
+const pageTitle = title ? `${title} · ${siteInfo.title}` : `${siteInfo.title}的博客`;
 const canonical = new URL(Astro.url.pathname, siteInfo.url);
 ---
 <!doctype html>
