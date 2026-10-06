@@ -1,0 +1,80 @@
+name: Sync Feishu Knowledge Base
+
+on:
+  # 支持在 GitHub Actions 页面手动执行
+  workflow_dispatch:
+
+  # 每天香港时间凌晨 3:17 执行
+  schedule:
+    - cron: '17 3 * * *'
+      timezone: 'Asia/Hong_Kong'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-feishu
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: Pull Feishu articles
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Feishu knowledge base
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_SPACE_ID: ${{ secrets.FEISHU_SPACE_ID }}
+
+          # 如果使用国际版 Lark，可以取消下面一行的注释
+          # FEISHU_ENDPOINT: ${{ secrets.FEISHU_ENDPOINT }}
+
+          FEISHU_OUTPUT_DIR: ./feishu_pages/dist
+          OUTPUT_DIR: ./feishu_pages/dist
+
+          ARTICLE_DEST_DIR: ./src/content/posts
+          IMAGE_DEST_DIR: ./public/assets
+
+          URL_STYLE: nested
+          BASE_URL: /
+
+        run: pnpm run sync
+
+      - name: Show changed files
+        run: git status --short
+
+      - name: Commit updated Feishu content
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add src/content/posts public/assets
+
+          if git diff --cached --quiet; then
+            echo "Feishu content has no changes."
+          else
+            git commit -m "chore: sync Feishu knowledge base"
+            git push
+          fi

@@ -9,13 +9,18 @@
     "astro": "astro",
     "check": "astro check && vue-tsc --noEmit",
     "test": "playwright test",
-    "deploy:local": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/preview.ps1"
+    "deploy:local": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/preview.ps1",
+    "export": "feishu-pages",
+    "normalize": "node scripts/normalize.mjs",
+    "sync": "pnpm run export && pnpm run normalize"
   },
   "dependencies": {
     "@astrojs/vue": "^7.0.3",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.3",
+    "feishu-pages": "^0.7.6",
+    "js-yaml": "^5.4.3",
     "tailwindcss": "^4.3.3",
     "vue": "^3.5.26"
   },
