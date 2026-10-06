@@ -1,0 +1,46 @@
+---
+import { withBase } from "../lib/urls";
+import BlogLayout from "../layouts/BlogLayout.astro";
+import { personalInfo } from "../config";
+---
+<BlogLayout title="关于" heroTitle="" heroSubtitle="">
+  <section class="card page-card about-card">
+    <div class="about-intro"><img src={personalInfo.avatar} width="90" height="90" alt="示例作者" /><div><span class="eyebrow">HELLO, I'M Lrinaus</span><h2>关于我</h2></div></div>
+    <div class="prose">
+      <p>你好，我是薯条，也可以叫我 Lrinaus。</p>
+      <p>​2004年，我出生在河南。和很多小镇做题家的苦情叙事不同，我的童年是在一望无际的大平原上度过的。我似乎从未被“地区落后”这种宏大的词汇困住，反倒是各种机械和玩具填满了我的好奇心。</p>
+      <p>​我对计算机的启蒙，源于姥爷家一台旧电脑和我不知道在哪里发现的《RimWorld》。
+      为了让游戏跑得更流畅，我开始瞎折腾软硬件，甚至顺带着学了不少英语。
+      从那时候起我就发现，我好像不太喜欢那种精密安排好的 3A 工业流水线，我更着迷于程序化生成、能在既定规则内自由演变的世界。我喜欢那种创造的实感。</p>
+      
+      <p>当然了，我是个彻头彻尾的二次元，迷恋那种纯白无瑕的乌托邦美学。我渴望进入游戏行业，去做渲染和TA相关的工作。最开始，我对二次元的认知还仅限于动漫和其他的2D载体。
+      后来一个个二游冒了出来，你可能很难理解那种成熟的三渲二画面对我的震撼，
+      这些二游也在我心里埋下了一颗种子：我们有没有可能真正打通虚拟与现实的边界？</p>
+      
+      <p>​我原以为这会是一个漫长的过程，但技术的进步带给我
+      “有生之年我能够​亲眼见证虚拟角色走向现实”的希望，这让我感到无比的欣喜；与之相伴的，是巨大的焦虑与迷茫。我突然发现，技术迭代的速度似乎已经远远超过了我拼命学习的速度。面对行业里日新月异的图形技术和那些满级神仙，我真的能追上这趟时代的列车，走上这条路吗？我不知道。</p>
+      <p>如今，我是上海交大计算机系的一名研究生，研究方向是数字人重建。我希望通过一点一滴的积累，能够有向梦想更进一步了。</p>
+      <p>所以这就是现在的我——一个在平原上长大、被游戏和好奇心一路推着走，仍在努力学习如何将脑海中的乌托邦变成现实画面的普通人。</p>
+
+      <blockquote><p>对世界充满好奇，也常常在门口犹豫。做一点自己喜欢的事，也把喜欢分享给别人。</p></blockquote>
+    </div>
+    <div class="about-links"><a class="btn" href={personalInfo.github} target="_blank" rel="noopener noreferrer"><span class="icon-[jam--github]" aria-hidden="true"></span>GitHub</a><a class="btn secondary" href={withBase("/posts/")}>读读我的文章<span class="icon-[lucide--arrow-right]" aria-hidden="true"></span></a></div>
+    <div class="about-end">相遇即是缘分</div>
+  </section>
+</BlogLayout>
+<style>
+.about-intro { display: flex; align-items: center; gap: 22px; }
+.about-intro img { border-radius: 26px; transform: rotate(-4deg); box-shadow: 5px 5px 0 var(--accent-soft); }
+.about-intro .eyebrow { font-size: 9px; }
+.about-intro h2 { font-size: 23px; margin: 7px 0; }
+.about-intro p { color: var(--muted); font-size: 11px; margin: 0; }
+.interest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.interest-grid > div { border-radius: 12px; background: var(--accent-soft); padding: 20px; }
+.interest-grid span { color: var(--accent); font-size: 25px; display: block; margin-bottom: 13px; }
+.interest-grid strong { font-size: 14px; font-weight: 400; }
+.interest-grid p { font-size: 11px; line-height: 2; color: var(--muted); margin-bottom: 0; }
+.about-links { display: flex; flex-wrap: wrap; gap: 12px; margin: 25px 0; font-size: 12px; }
+.about-end { text-align: center; border-top: 1px dashed var(--line); margin-top: 32px; padding-top: 25px; color: var(--muted); font-size: 11px; }
+.about-end span { display:block; font-size: 22px; color: var(--accent); margin-top: 10px; }
+@media(max-width:480px) { .about-intro { flex-direction: column; text-align: center; } .about-intro h2 { font-size: 21px; } .interest-grid { gap: 10px; } .interest-grid > div { padding: 15px; } }
+</style>

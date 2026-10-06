@@ -1,0 +1,9 @@
+---
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import PostFeed from "../../components/posts/PostFeed.vue";
+import { getPosts, summarize } from "../../lib/posts";
+const posts = (await getPosts()).map(summarize);
+---
+<BlogLayout title="文章" heroTitle="" heroSubtitle="">
+  <PostFeed posts={posts} archive client:load />
+</BlogLayout>
