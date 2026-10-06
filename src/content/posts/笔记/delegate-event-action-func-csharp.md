@@ -6,7 +6,6 @@ tags:
   - Csharp
 category: 笔记
 cover: notes
-image: /assets/JabEbNjnEoLEpYxlTbscr8sCnpe.jpeg
 ---
 
 # Delegate、event、action & func in C# 
@@ -22,8 +21,6 @@ public delegate void MyDelegate (int para);
 ```
 
 上面就是一个输入参数为int，无返回值的委托的声明。
-
-<img src="/assets/JabEbNjnEoLEpYxlTbscr8sCnpe.jpeg" src-width="4439" src-height="2340" align="center"/>
 
 它可以这样用：
 
