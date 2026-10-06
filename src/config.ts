@@ -1,7 +1,7 @@
 import { withBase } from "./lib/urls";
 export const siteInfo = {
   title: "隔夜薯条",
-  description: "一个记录热爱与日常的小角落。",
+  description: "一个互联网小角落。",
   keywords: ["Astro", "Kanade", "博客", "隔夜薯条"],
   // 发布到域名时设置 SITE_URL，例如 https://example.com。
   url: import.meta.env.SITE_URL || "http://lisii.cn",
