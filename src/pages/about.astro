@@ -9,16 +9,20 @@ import { personalInfo } from "../config";
     <div class="prose">
       <p>你好，我是薯条，也可以叫我 Lrinaus。</p>
       <p>​2004年，我出生在河南。和很多小镇做题家的苦情叙事不同，我的童年是在一望无际的大平原上度过的。我似乎从未被“地区落后”这种宏大的词汇困住，反倒是各种机械和玩具填满了我的好奇心。</p>
-      <p>​我对计算机的启蒙，源于姥爷家一台旧电脑和我不知道在哪里发现的《RimWorld》。
-      为了让游戏跑得更流畅，我开始瞎折腾软硬件，甚至顺带着学了不少英语。
-      从那时候起我就发现，我好像不太喜欢那种精密安排好的 3A 工业流水线，我更着迷于程序化生成、能在既定规则内自由演变的世界。我喜欢那种创造的实感。</p>
+      <p>​我对计算机的启蒙源于姥爷家一台旧电脑和我不知道在哪里发现的《RimWorld》。
+      为了让游戏跑得更流畅，我开始瞎折腾软硬件，也顺带着学了不少英语。
+      我发现我好像不太喜欢那种精密安排好的 3A 工业流水线，我更着迷于程序化生成、能在既定规则内自由演变的世界。我喜欢那种创造的实感。</p>
       
       <p>当然了，我是个彻头彻尾的二次元，迷恋那种纯白无瑕的乌托邦美学。我渴望进入游戏行业，去做渲染和TA相关的工作。</p>
       <p>至于现在，我是上海交大计算机系的一名研究生，目前正在研究数字人的3d重建。</p>
       <p>希望你能在我的文章里有点收获！如果你对我感兴趣，也欢迎来找我交流！</p>
 
     </div>
-    <div class="about-links"><a class="btn" href={personalInfo.github} target="_blank" rel="noopener noreferrer"><span class="icon-[jam--github]" aria-hidden="true"></span>GitHub</a><a class="btn secondary" href={withBase("/posts/")}>读读我的文章<span class="icon-[lucide--arrow-right]" aria-hidden="true"></span></a></div>
+    <div class="about-links">
+      <a class="btn" href={personalInfo.github} target="_blank" rel="noopener noreferrer"><span class="icon-[jam--github]" aria-hidden="true"></span>GitHub</a>
+      <a class="btn" href={withBase("/about/")} target="_blank" rel="noopener noreferrer"><span class="icon-[lucide--mail]" aria-hidden="true"></span>{personalInfo.mail}</a>
+      <a class="btn secondary" href={withBase("/posts/")}>读读我的文章<span class="icon-[lucide--arrow-right]" aria-hidden="true"></span></a>
+    </div>
     <div class="about-end">相遇即是缘分</div>
   </section>
 </BlogLayout>

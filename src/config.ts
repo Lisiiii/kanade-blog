@@ -19,7 +19,7 @@ export const headerConfig = {
 };
 
 export const welcomeConfig = {
-  title: "欢迎你，远道而来的朋友",
+  title: "欢迎来到我的小站",
   subTitle: "I write because I don't know what I think until I read what I say.",
   bgImage: withBase("/images/hero.png"),
 };
@@ -28,11 +28,13 @@ export const personalInfo = {
   name: "隔夜薯条",
   englishName: "Lrinaus",
   avatar: withBase("/images/avatar.png"),
-  role: "SJTUer",
-  bio: "这是一句介绍",
+  role: "也许是个笨蛋",
+  bio: "SJTU计算机研究生在读",
+  chasing: "为了成为游戏开发者和TA而努力中...",
   github: "https://github.com/lisiiii",
   socialLinks: [
     { name: "GitHub", icon: "icon-[jam--github]", url: "https://github.com/lisiiii" },
-    { name: "Gmail", icon: "icon-[lucide--mail]", url: "/about/" },
+    { name: "lisiyao20041017@outlook.com", icon: "icon-[lucide--mail]", url: "mailto:lisiyao20041017@outlook.com" },
   ],
+  mail: "lisiyao20041017@outlook.com"
 };
